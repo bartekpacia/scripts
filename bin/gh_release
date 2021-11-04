@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
+
+# Example usage: 
+# $ gh_release atom/atom
 
 user_repo="${1:-}" # e.g bartekpacia/dotfiles
 
@@ -9,18 +11,13 @@ if [ -z "$user_repo" ]; then
 	exit 1
 fi
 
-echo "GITHUB_TOKEN=$GITHUB_TOKEN"
-
 auth=""
 if [ -n "$GITHUB_TOKEN" ]; then
-	echo "GITHUB_TOKEN IS NOT EMPTY"
-	auth="-H Authorization: token $GITHUB_TOKEN"
-	echo "auth=$auth"
+	auth="-H ""\"""Authorization: token $GITHUB_TOKEN""\""
+	echo "authorizing with GITHUB_TOKEN"
 fi
 
-# echo "auth=$auth"
-
-curl -s "$auth" "https://api.github.com/repos/$user_repo/releases/latest" \
+curl -s ${auth:+$auth} "https://api.github.com/repos/$user_repo/releases/latest" \
 	| grep browser_download_url
 	# | grep linux-amd64 \
 	# | cut -d '"' -f 4
