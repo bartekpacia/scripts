@@ -13,7 +13,8 @@ fi
 
 auth=""
 if [ -n "$GITHUB_TOKEN" ]; then
-	auth="-H Authorization: token $GITHUB_TOKEN"
+	token="token: $GITHUB_TOKEN"
+	auth="-H \"Authorization: $token\""
 	echo "authorizing with GITHUB_TOKEN"
 fi
 
