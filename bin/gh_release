@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Example usage: 
+# Example usage:
 # $ gh_release atom/atom
+# $ ./gh_release atom/atom | grep amd64.deb | cut -d '"' -f 4
 
 user_repo="${1:-}" # e.g bartekpacia/dotfiles
 
 if [ -z "$user_repo" ]; then
-	echo "user_repo is empty"
-	exit 1
+    echo "user_repo is empty"
+    exit 1
 fi
 
-auth=""
 if [ -n "$GITHUB_TOKEN" ]; then
-	token="token: $GITHUB_TOKEN"
-	auth="-H \"Authorization: $token\""
-	echo "authorizing with GITHUB_TOKEN"
+    echo "authorizing with GITHUB_TOKEN"
+    curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$user_repo/releases/latest" \
+    | grep browser_download_url
+    # | grep linux-amd64 \
+    # | cut -d '"' -f 4
+else
+    curl -s "https://api.github.com/repos/$user_repo/releases/latest" \
+    | grep browser_download_url
+    # | grep linux-amd64 \
+    # | cut -d '"' -f 4
 fi
-
-curl -s ${auth:+$auth} "https://api.github.com/repos/$user_repo/releases/latest" \
-	| grep browser_download_url
-	# | grep linux-amd64 \
-	# | cut -d '"' -f 4
