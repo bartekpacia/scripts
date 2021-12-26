@@ -13,7 +13,6 @@ if [ -z "$user_repo" ]; then
 fi
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    echo "authorizing with GITHUB_TOKEN"
     curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$user_repo/releases/latest" \
     | grep browser_download_url
     # | grep linux-amd64 \
