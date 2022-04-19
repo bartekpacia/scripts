@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# easily source environment variables from .env file
+# usage: "source source_env"
+
+command cat .env | while read line; do
+	if [ -n "$line" ]; then
+		export $line
+    	printf "export $line\n"
+    fi
+done
