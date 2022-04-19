@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 # easily source environment variables from .env file
 # usage: "source source_env"
