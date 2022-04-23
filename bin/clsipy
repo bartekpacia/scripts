@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# delete outputs of all jupyter notebooks in current directory
-# and subdirectories
+# clsipy deletes outputs of all jupyter notebooks in current directory and
+# subdirectories.
 python -m nbconvert --clear-output *.ipynb **/*.ipynb
