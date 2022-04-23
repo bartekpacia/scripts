@@ -11,6 +11,7 @@ if [ -z "$cmd" ]; then
 fi
 
 case "$cmd" in 
+    "list") emulator -list-avds ;;
     "font") 
         font="${2-}"
         if [ -z "$font" ]; then
@@ -19,25 +20,13 @@ case "$cmd" in
         fi
 
         case "$font" in 
-            "small")
-                adb shell settings put global font_scale 1.85
-                ;;
-            "default")
-                adb shell settings put global font_scale 1.0
-                ;;
-            "large")
-                adb shell settings put global font_scale 1.15
-                ;;
-            "largest")
-                adb shell settings put global font_scale 1.30
-                ;;
-            "reset")
-                adb shell wm density reset
-                ;;
-            *)
-                echo "invalid font"
-                exit 1
-                ;;
+            "small") adb shell settings put global font_scale 1.85 ;;
+            "default") adb shell settings put global font_scale 1.0 ;;
+            "large") adb shell settings put global font_scale 1.15 ;;
+            "largest") adb shell settings put global font_scale 1.30 ;;
+            "reset") adb shell wm density reset ;;
+            *) echo "invalid font"; exit 1 ;;
         esac
         ;;
+    *) echo "unknown command"; exit 1 ;;
 esac
