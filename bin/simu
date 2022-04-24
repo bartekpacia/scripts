@@ -15,7 +15,7 @@ case "$cmd" in
         options="${2-}"
 
         if [ "$options" = "-a" ] || [ "$options" = "--all" ]; then
-            xcrun simctl list devices
+            xcrun simctl list devices | grep --invert-match --ignore-case "unavailable"
         else
             xcrun simctl list devices | { grep "Booted" || true; }
         fi
