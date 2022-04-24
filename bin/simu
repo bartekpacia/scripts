@@ -14,7 +14,7 @@ case "$cmd" in
     "list") 
         options="${2-}"
 
-        if [ options = "-a" ] || [ options = "--all" ]; then
+        if [ "$options" = "-a" ] || [ "$options" = "--all" ]; then
             xcrun simctl list devices
         else
             xcrun simctl list devices | { grep "Booted" || true; }
