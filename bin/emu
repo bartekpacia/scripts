@@ -11,6 +11,14 @@ if [ -z "$cmd" ]; then
 fi
 
 case "$cmd" in 
+    "run")
+        echo "running"
+        device="${2-}"
+        if [ -z "$device"]; then
+            echo "device not provided"
+        exit
+        (emulator @"$device" 1> /dev/null 2>&1 &) > /dev/null 2>&
+        ;;
     "list") emulator -list-avds ;;
     "font") 
         font="${2-}"
