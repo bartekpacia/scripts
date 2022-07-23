@@ -21,6 +21,19 @@ case "$cmd" in
         (emulator "@$device" 1> /dev/null 2>&1 &) > /dev/null 2>&1
         ;;
     "list") emulator -list-avds ;;
+    "theme")
+        theme="${2-}"
+        if [ -z "$theme" ]; then
+            echo "theme not provided (allowed: dark or light)"
+            exit 1
+        fi
+
+        if [ "$theme" = "light" ]; then
+            adb shell cmd uimode night no > /dev/null
+        elif [ "$theme" = "dark" ]; then
+            adb shell cmd uimode night yes > /dev/null
+        fi
+        ;;
     "font") 
         font="${2-}"
         if [ -z "$font" ]; then
