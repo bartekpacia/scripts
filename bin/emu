@@ -21,6 +21,11 @@ case "$cmd" in
         (emulator "@$device" 1> /dev/null 2>&1 &) > /dev/null 2>&1
         ;;
     "list") emulator -list-avds ;;
+    "killall")
+        pgrep qemu | while read pid; do
+            kill -9 "$pid"
+        done
+        ;;
     "theme")
         theme="${2-}"
         if [ -z "$theme" ]; then
