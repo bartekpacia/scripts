@@ -2,6 +2,8 @@
 # fail if any commands fails
 set -e
 
+# changelog prints a nice log of recent git commits.
+
 # Read all tags, separate them into an array
 all_tags=$(git tag -l | wc -l)
 
