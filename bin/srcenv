@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# easily source environment variables from .env file
-# usage: "source source_env"
-
+# srcenv sources environment variables from .env file. Must be called with the
+# source builtin.
 
 # see https://stackoverflow.com/a/246128/7009800
 SOURCE=${BASH_SOURCE[0]}
