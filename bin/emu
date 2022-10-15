@@ -18,7 +18,7 @@ case "$cmd" in
             exit 1
         fi
 
-        (emulator "@$device" -no-audio 1> /dev/null 2>&1 &) > /dev/null 2>&1
+        (emulator "@$device" -no-boot-anim -no-audio 1> /dev/null 2>&1 &) > /dev/null 2>&1
         ;;
     "list") emulator -list-avds ;;
     "killall")
