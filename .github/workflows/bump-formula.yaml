@@ -3,7 +3,7 @@ name: bump brew formula
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   main:
