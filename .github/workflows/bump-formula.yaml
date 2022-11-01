@@ -14,6 +14,6 @@ jobs:
         uses: dawidd6/action-homebrew-bump-formula@v3
         with:
           token: ${{ secrets.TOKEN }}
-          tap: bartekpacia/homebrew-tools # Optional, defaults to homebrew/core
-          formula: shell-scripts # Formula name, required
-          # force: false # Optional, if don't want to check for already open PRs
+          tap: bartekpacia/homebrew-tools
+          formula: shell-scripts
+          force: true
