@@ -3,17 +3,24 @@ name: bump brew formula
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   main:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Create version
+        run: |
+          tag=$GITHUB_REF
+          version="${tag#v}"
+          echo "VERSION=$version" >> $GITHUB_ENV
+
       - name: Update Homebrew formula
         uses: dawidd6/action-homebrew-bump-formula@v3
         with:
           token: ${{ secrets.TOKEN }}
           tap: bartekpacia/homebrew-tools
           formula: shell-scripts
+          tag: ${{ env.VERSION }}
           force: true
