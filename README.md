@@ -1,3 +1,3 @@
-# shell-scripts
+# scripts
 
-My collection of shell scripts.
+Personal collection of various scripts.
