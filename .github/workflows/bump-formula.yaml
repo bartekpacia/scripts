@@ -15,5 +15,5 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           tap: bartekpacia/homebrew-tools
-          formula: shell-scripts
+          formula: scripts
           force: true
