@@ -5,7 +5,7 @@ set -euo pipefail
 
 cmd="${1-}"
 
-if [ -z "$cmd" ]; then
+if [ -z "$cmd" ]; the
 	echo "command not provided"
 	exit 1
 fi
