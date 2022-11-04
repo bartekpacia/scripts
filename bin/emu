@@ -20,7 +20,7 @@ case "$cmd" in
 
 	(emulator "@$device" -no-boot-anim -no-audio 1>/dev/null 2>&1 &) >/dev/null 2>&1
 	;;
-    "list") emulator -list-avds ;;
+"list") emulator -list-avds ;;
 "killall")
 	pgrep qemu | while read -r pid; do
 		kill -9 "$pid"
