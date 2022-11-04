@@ -22,7 +22,7 @@ case "$cmd" in
         ;;
     "list") emulator -list-avds ;;
     "killall")
-        pgrep qemu | while read pid; do
+        pgrep qemu | while read -r pid; do
             kill -9 "$pid"
         done
         ;;
