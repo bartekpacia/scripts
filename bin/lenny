@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# lenny prints common lenny faces.
+
+arg="${1:-}"
+if [ -n "$arg" ]; then
+    echo "error: name the lenny!"
+elif [ "$arg" = "sad" ]; then
+    echo "( ͡° ʖ̯ ͡°)"
+elif [ "$arg" = "sly" ]; then
+    echo "( ͡° ͜ʖ ͡°)"
+elif [ "$arg" = "idk" ]; then
+    echo "¯\_(ツ)_/¯"
+else
+    echo "error: invalid lenny"
+fi
