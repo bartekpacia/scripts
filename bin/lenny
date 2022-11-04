@@ -5,13 +5,13 @@ set -euo pipefail
 
 arg="${1:-}"
 if [ -n "$arg" ]; then
-    echo "error: name the lenny!"
+	echo "error: name the lenny!"
 elif [ "$arg" = "sad" ]; then
-    echo "( ͡° ʖ̯ ͡°)"
+	echo "( ͡° ʖ̯ ͡°)"
 elif [ "$arg" = "sly" ]; then
-    echo "( ͡° ͜ʖ ͡°)"
+	echo "( ͡° ͜ʖ ͡°)"
 elif [ "$arg" = "idk" ]; then
-    echo "¯\_(ツ)_/¯"
+	echo "¯\_(ツ)_/¯"
 else
-    echo "error: invalid lenny"
+	echo "error: invalid lenny"
 fi

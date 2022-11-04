@@ -6,54 +6,60 @@ set -euo pipefail
 cmd="${1-}"
 
 if [ -z "$cmd" ]; then
-    echo "command not provided"
-    exit 1
+	echo "command not provided"
+	exit 1
 fi
 
-case "$cmd" in 
-    "run")
-        device="${2-}"
-        if [ -z "$device" ]; then
-            echo "device not provided"
-            exit 1
-        fi
+case "$cmd" in
+"run")
+	device="${2-}"
+	if [ -z "$device" ]; then
+		echo "device not provided"
+		exit 1
+	fi
 
-        (emulator "@$device" -no-boot-anim -no-audio 1> /dev/null 2>&1 &) > /dev/null 2>&1
-        ;;
-    "list") emulator -list-avds ;;
-    "killall")
-        pgrep qemu | while read -r pid; do
-            kill -9 "$pid"
-        done
-        ;;
-    "theme")
-        theme="${2-}"
-        if [ -z "$theme" ]; then
-            echo "theme not provided (allowed: dark or light)"
-            exit 1
-        fi
+	(emulator "@$device" -no-boot-anim -no-audio 1>/dev/null 2>&1 &) >/dev/null 2>&1
+	;;
+"list") emulator -list-avds ;;
+"killall")
+	pgrep qemu | while read -r pid; do
+		kill -9 "$pid"
+	done
+	;;
+"theme")
+	theme="${2-}"
+	if [ -z "$theme" ]; then
+		echo "theme not provided (allowed: dark or light)"
+		exit 1
+	fi
 
-        if [ "$theme" = "light" ]; then
-            adb shell cmd uimode night no > /dev/null
-        elif [ "$theme" = "dark" ]; then
-            adb shell cmd uimode night yes > /dev/null
-        fi
-        ;;
-    "font") 
-        font="${2-}"
-        if [ -z "$font" ]; then
-            echo "font not provided"
-            exit 1
-        fi
+	if [ "$theme" = "light" ]; then
+		adb shell cmd uimode night no >/dev/null
+	elif [ "$theme" = "dark" ]; then
+		adb shell cmd uimode night yes >/dev/null
+	fi
+	;;
+"font")
+	font="${2-}"
+	if [ -z "$font" ]; then
+		echo "font not provided"
+		exit 1
+	fi
 
-        case "$font" in 
-            "small") adb shell settings put global font_scale 1.85 ;;
-            "default") adb shell settings put global font_scale 1.0 ;;
-            "large") adb shell settings put global font_scale 1.15 ;;
-            "largest") adb shell settings put global font_scale 1.30 ;;
-            "reset") adb shell wm density reset ;;
-            *) echo "invalid font"; exit 1 ;;
-        esac
-        ;;
-    *) echo "unknown command"; exit 1 ;;
+	case "$font" in
+	"small") adb shell settings put global font_scale 1.85 ;;
+	"default") adb shell settings put global font_scale 1.0 ;;
+	"large") adb shell settings put global font_scale 1.15 ;;
+	"largest") adb shell settings put global font_scale 1.30 ;;
+	"reset") adb shell wm density reset ;;
+	*)
+		echo "invalid font"
+		exit 1
+		;;
+	esac
+	;;
+*)
+	echo "unknown command"
+	exit 1
+	;;
 esac

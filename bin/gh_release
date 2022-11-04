@@ -8,18 +8,18 @@ set -euo pipefail
 user_repo="${1:-}" # e.g bartekpacia/dotfiles
 
 if [ -z "$user_repo" ]; then
-    echo "user_repo is empty"
-    exit 1
+	echo "user_repo is empty"
+	exit 1
 fi
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$user_repo/releases/latest" \
-    | grep browser_download_url
-    # | grep linux-amd64 \
-    # | cut -d '"' -f 4
+	curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$user_repo/releases/latest" |
+		grep browser_download_url
+	# | grep linux-amd64 \
+	# | cut -d '"' -f 4
 else
-    curl -s "https://api.github.com/repos/$user_repo/releases/latest" \
-    | grep browser_download_url
-    # | grep linux-amd64 \
-    # | cut -d '"' -f 4
+	curl -s "https://api.github.com/repos/$user_repo/releases/latest" |
+		grep browser_download_url
+	# | grep linux-amd64 \
+	# | cut -d '"' -f 4
 fi

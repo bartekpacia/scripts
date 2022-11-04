@@ -6,19 +6,22 @@ set -euo pipefail
 cmd="${1-}"
 
 if [ -z "$cmd" ]; then
-    echo "command not provided"
-    exit 1
+	echo "command not provided"
+	exit 1
 fi
 
-case "$cmd" in 
-    "list") 
-        options="${2-}"
+case "$cmd" in
+"list")
+	options="${2-}"
 
-        if [ "$options" = "-a" ] || [ "$options" = "--all" ]; then
-            xcrun simctl list devices | grep --invert-match --ignore-case "unavailable"
-        else
-            xcrun simctl list devices | { grep "Booted" || true; }
-        fi
-        ;;
-    *) echo "unknown command"; exit 1 ;;
+	if [ "$options" = "-a" ] || [ "$options" = "--all" ]; then
+		xcrun simctl list devices | grep --invert-match --ignore-case "unavailable"
+	else
+		xcrun simctl list devices | { grep "Booted" || true; }
+	fi
+	;;
+*)
+	echo "unknown command"
+	exit 1
+	;;
 esac
