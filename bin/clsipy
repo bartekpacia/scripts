@@ -3,4 +3,5 @@ set -euo pipefail
 
 # clsipy deletes outputs of all jupyter notebooks in current directory and
 # subdirectories.
-python -m nbconvert --clear-output *.ipynb **/*.ipynb
+
+python -m nbconvert --clear-output ./*.ipynb ./**/*.ipynb
