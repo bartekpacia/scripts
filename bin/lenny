@@ -4,7 +4,7 @@ set -euo pipefail
 # lenny prints common lenny faces.
 
 arg="${1:-}"
-if [ -n "$arg" ]; then
+if [ -z "$arg" ]; then
 	echo "error: name the lenny!"
 elif [ "$arg" = "sad" ]; then
 	echo "( ͡° ʖ̯ ͡°)"
