@@ -14,6 +14,6 @@ DIR=$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)
 
 command cat "$DIR/.env" | while read -r line; do
 	if [ -n "$line" ]; then
-		export line
+		export "${line?}"
 	fi
 done
