@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+_update() {
+	bundle update --bundler
+	bundle update
+}
+
+if [ -d "android" ]; then
+	pushd android
+	_update
+	popd
+fi
+
+if [ -d "ios" ]; then
+	pushd android
+	_update
+	popd
+fi
