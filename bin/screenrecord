@@ -3,15 +3,15 @@ set -uo pipefail
 
 # execute adb shell screenrecord as long as its exit code is 1
 function record() {
-    output=$(adb shell screenrecord /sdcard/patrol.mp4 2>&1)
-    echo "output: $output"
-    # while [[ "$output" == *"Unable to open '/sdcard/patrol.mp4': Operation not permitted"* ]]; do
-    while [[ "$output" == *"adb: no devices/emulators found"* ]]; do
-        echo "output: $output, trying again"
-        sleep 1
-        output=$(adb shell screenrecord /sdcard/patrol.mp4 2>&1)
-    done
-    echo "started screen recording"
+	output=$(adb shell screenrecord /sdcard/patrol.mp4 2>&1)
+	echo "output: $output"
+	# while [[ "$output" == *"Unable to open '/sdcard/patrol.mp4': Operation not permitted"* ]]; do
+	while [[ "$output" == *"adb: no devices/emulators found"* ]]; do
+		echo "output: $output, trying again"
+		sleep 1
+		output=$(adb shell screenrecord /sdcard/patrol.mp4 2>&1)
+	done
+	echo "started screen recording"
 }
 
 record
