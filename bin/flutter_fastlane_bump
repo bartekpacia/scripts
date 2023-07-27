@@ -13,7 +13,7 @@ if [ -d "android" ]; then
 fi
 
 if [ -d "ios" ]; then
-	pushd android
+	pushd ios
 	_update
 	popd
 fi
