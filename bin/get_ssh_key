@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "$0")"
-
 # This file contains functions that make it easier to for me to
 # access my SSH a new machine.
 # Example usage:
