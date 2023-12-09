@@ -16,3 +16,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ github.ref_name }}
+
+      - name: Update Homebrew formula
+        uses: dawidd6/action-homebrew-bump-formula@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          tap: bartekpacia/homebrew-tools
+          formula: scripts
+          force: true
