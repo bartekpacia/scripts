@@ -5,6 +5,8 @@ set -euo pipefail
 # access my SSH a new machine.
 # Example usage:
 # $ get_ssh_key "Personal" "git commit signing key"
+# To list all SSH keys:
+# $ op item list --categories 'SSH Key'
 
 vault_name="${1:-}"
 item_name="${2:-}"
