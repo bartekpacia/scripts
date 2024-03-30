@@ -20,11 +20,6 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           MY_GITHUB_PAT: op://Developer/GitHub/TMP_PAT
 
-      - name: Create release on GitHub
-        uses: softprops/action-gh-release@v1
-        with:
-          name: ${{ github.ref_name }}
-
       - name: Update Homebrew formula
         uses: dawidd6/action-homebrew-bump-formula@v3
         with:
@@ -32,3 +27,8 @@ jobs:
           tap: bartekpacia/homebrew-tools
           formula: scripts
           force: true
+
+      - name: Create release on GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ github.ref_name }}
