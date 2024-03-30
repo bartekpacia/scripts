@@ -3,7 +3,7 @@ name: publish
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   main:
@@ -11,6 +11,14 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
+
+      - name: Load secret
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          GITHUB_PAT: op://Developer/GitHub/PAT
 
       - name: Create release on GitHub
         uses: softprops/action-gh-release@v1
@@ -20,7 +28,7 @@ jobs:
       - name: Update Homebrew formula
         uses: dawidd6/action-homebrew-bump-formula@v3
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ env.GITHUB_PAT }}
           tap: bartekpacia/homebrew-tools
           formula: scripts
           force: true
