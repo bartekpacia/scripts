@@ -18,7 +18,7 @@ jobs:
           export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          MY_GITHUB_PAT: op://Developer/GitHub/PAT
+          MY_GITHUB_PAT: op://Developer/GitHub/TMP_PAT
 
       - name: Create release on GitHub
         uses: softprops/action-gh-release@v1
