@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/usr/bin/env sh
+set -eu
 
 # This file contains functions that make it easier to for me to
 # access my SSH a new machine.

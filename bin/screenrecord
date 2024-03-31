@@ -1,16 +1,18 @@
-#!/usr/bin/env bash
-set -uo pipefail
+#!/usr/bin/env sh
+set -u
 
 # execute adb shell screenrecord as long as its exit code is 1
-function record() {
+record() {
 	output=$(adb shell screenrecord /sdcard/patrol.mp4 2>&1)
 	echo "output: $output"
 	# while [[ "$output" == *"Unable to open '/sdcard/patrol.mp4': Operation not permitted"* ]]; do
-	while [[ "$output" == *"adb: no devices/emulators found"* ]]; do
+	case "$output" in
+	*"adb: no devices/emulators found"*)
 		echo "output: $output, trying again"
 		sleep 1
 		output=$(adb shell screenrecord /sdcard/patrol.mp4 2>&1)
-	done
+		;;
+	esac
 	echo "started screen recording"
 }
 

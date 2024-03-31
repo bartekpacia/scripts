@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/usr/bin/env sh
+set -eu
 
 _update() {
 	bundle update --bundler
@@ -7,13 +7,13 @@ _update() {
 }
 
 if [ -d "android" ]; then
-	pushd android
+	cd android
 	_update
-	popd
+	cd -
 fi
 
 if [ -d "ios" ]; then
-	pushd ios
+	cd ios
 	_update
-	popd
+	cd -
 fi
