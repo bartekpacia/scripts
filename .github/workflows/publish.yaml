@@ -7,26 +7,29 @@ on:
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Load secret
-        uses: 1password/load-secrets-action@v2
-        with:
-          export-env: true
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          MY_GITHUB_PAT: op://Developer/GitHub/PAT
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@v1
 
       - name: Update Homebrew formula
-        uses: dawidd6/action-homebrew-bump-formula@v3
-        with:
-          token: ${{ env.MY_GITHUB_PAT }}
-          tap: bartekpacia/homebrew-tools
-          formula: scripts
-          force: true
+        run: |
+          brew tap bartekpacia/tools
+          op run -- brew bump-formula-pr \
+            --message "bump version to $(git describe --tags)" \
+            --no-browse \
+            --strict \
+            --online \
+            --no-fork \
+            --tag "$(git describe --tags)" \
+            --revision "$(git rev-parse HEAD)" \
+            scripts
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          HOMEBREW_GITHUB_API_TOKEN: op://Developer/GitHub/PAT
 
       - name: Create release on GitHub
         uses: softprops/action-gh-release@v1
