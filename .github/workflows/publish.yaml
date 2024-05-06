@@ -17,6 +17,8 @@ jobs:
 
       - name: Update Homebrew formula
         run: |
+          git config --global user.name "GitHub Actions on behalf of Bartek Pacia"
+          git config --global user.email "barpac02@gmail.com"
           brew tap bartekpacia/tools
           op run -- brew bump-formula-pr \
             --message "bump version to $(git describe --tags)" \
