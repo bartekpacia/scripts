@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+
+ANDROID_USER_HOME="${ANDROID_USER_HOME:-$HOME/.android}"
+DEVICE="${1:-}"
+API_LEVEL="${2:-}"
+
+if [ -z "$DEVICE" ]; then
+    echo "Error: Device is required"
+    echo "Usage: create_avd <device> <api_level>"
+    exit 1
+fi
+
+if [ -z "$API_LEVEL" ]; then
+    echo "Error: API level is required"
+    echo "Usage: create_avd <device> <api_level>"
+    exit 1
+fi
+
+
+uppercase_device=$(echo "$DEVICE" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')
+avd_name="${uppercase_device}_API_$API_LEVEL"
+
+echo "Will create AVD: $avd_name"
+
+avdmanager create avd \
+	--sdcard '8192M' \
+	--package "system-images;android-$API_LEVEL;google_apis;arm64-v8a" \
+	--name "$avd_name" \
+	--device "$DEVICE"
+
+sed -i '' 's/hw\.keyboard = no/hw.keyboard = yes/' "$ANDROID_USER_HOME/avd/$avd_name.avd/config.ini"
+sed -i '' 's/hw\.ramSize = .*/hw.ramSize = 4096M/' "$ANDROID_USER_HOME/avd/$avd_name.avd/config.ini"
+sed -i '' 's/hw\.heapSize = .*/hw.heapSize = 1024M/' "$ANDROID_USER_HOME/avd/$avd_name.avd/config.ini"
