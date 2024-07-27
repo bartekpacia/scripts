@@ -16,6 +16,17 @@ if [ -z "$API_LEVEL" ]; then
     exit 1
 fi
 
+# | Google Pixel Phone | Release Date   | Android Version at Release | SDK Version |
+# |--------------------|----------------|----------------------------|-------------|
+# | Pixel (1st Gen)    | October 2016   | Android 7.1 Nougat         | 25          |
+# | Pixel 2            | October 2017   | Android 8.0 Oreo           | 26          |
+# | Pixel 3            | October 2018   | Android 9.0 Pie            | 28          |
+# | Pixel 4            | October 2019   | Android 10                 | 29          |
+# | Pixel 5            | October 2020   | Android 11                 | 30          |
+# | Pixel 6            | October 2021   | Android 12                 | 31          |
+# | Pixel 7            | October 2022   | Android 13                 | 33          |
+# | Pixel 8            | October 2023   | Android 14                 | 34          |
+
 
 uppercase_device=$(echo "$DEVICE" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')
 avd_name="${uppercase_device}_API_$API_LEVEL"
