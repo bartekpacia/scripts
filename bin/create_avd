@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -euo pipefail
 
 ANDROID_USER_HOME="${ANDROID_USER_HOME:-$HOME/.android}"
 DEVICE="${1:-}"
@@ -34,7 +35,6 @@ avd_name="${uppercase_device}_API_$API_LEVEL"
 echo "Will create AVD: $avd_name"
 
 avdmanager create avd \
-	--sdcard '8192M' \
 	--package "system-images;android-$API_LEVEL;google_apis;arm64-v8a" \
 	--name "$avd_name" \
 	--device "$DEVICE"
