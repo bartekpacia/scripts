@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -euo pipefail
+set -eu
 
 ANDROID_HOME="${ANDROID_HOME:-$HOME/androidsdk}"
 ANDROID_USER_HOME="${ANDROID_USER_HOME:-$HOME/.android}"
