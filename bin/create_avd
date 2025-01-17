@@ -6,15 +6,15 @@ DEVICE="${1:-}"
 API_LEVEL="${2:-}"
 
 if [ -z "$DEVICE" ]; then
-    echo "Error: Device is required"
-    echo "Usage: create_avd <device> <api_level>"
-    exit 1
+	echo "Error: Device is required"
+	echo "Usage: create_avd <device> <api_level>"
+	exit 1
 fi
 
 if [ -z "$API_LEVEL" ]; then
-    echo "Error: API level is required"
-    echo "Usage: create_avd <device> <api_level>"
-    exit 1
+	echo "Error: API level is required"
+	echo "Usage: create_avd <device> <api_level>"
+	exit 1
 fi
 
 # | Google Pixel Phone | Release Date   | Android Version at Release | SDK Version |
@@ -27,7 +27,6 @@ fi
 # | Pixel 6            | October 2021   | Android 12                 | 31          |
 # | Pixel 7            | October 2022   | Android 13                 | 33          |
 # | Pixel 8            | October 2023   | Android 14                 | 34          |
-
 
 uppercase_device=$(echo "$DEVICE" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')
 avd_name="${uppercase_device}_API_$API_LEVEL"
