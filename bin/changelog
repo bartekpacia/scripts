@@ -1,35 +1,62 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# changelog prints a nice log of recent git commits.
+# changelog prints a nice changelog of recent git commits. It handles a few
+# common situations. It's primarily made to work for my common use cases and
+# workflows. It was mainly written with mobile apps in mind.
+#
+# It prints the changelog between TOP_REF (inclusive) and BOTTOM_REF (exclusive).
+# TOP_REF actually always refers to HEAD, but sometimes it's a tag, and sometimes a commit.
+# When run without any arguments, the "default logic" is used.
+# When run with arguments, the first argument is used as the BOTTOM_REF.
+#
 # Example usage:
-# $ changelog "$(git describe --tags --abbrev=0)" (changelog since the last tag)
+# $ changelog "$(git describe --tags --abbrev=0)" (changelog since the latest tag)
 # $ changelog @^^^ (changelog since 3 commits ago)
+#
+# Default logic:
+#  - dev/tst build: no tag points at HEAD. Print changelog between HEAD and the latest tag.
+#    - Edge case: no tags exist. In this case, print all commits.
+#  - prod build: tag points at HEAD. Print changelog between the tag and the previous tag.
+#    - Edge case: only one tag exists. In this case, print all commits.
 
-GIT_REF="${1:-}"
-if [ -z "$GIT_REF" ]; then
-	printf "No git ref was passed as the 1st argument. Up to 5 last commits will be used instead" >&2
-	changelog="$(git log -n 5 --pretty=format:" - %cs [%aN]: %s")"
+tag_at_head=$(git tag --points-at HEAD 2>/dev/null || echo "")
+if [ -z "$tag_at_head" ]; then
+	# No tag points at HEAD. Common case for dev/tst builds.
+	latest_tag="$(git describe --tags --abbrev=0 2>/dev/null || echo "")"
+	if [ -z "$latest_tag" ]; then
+		# There's no lastest tag (i.e. there are no tags at all). Use all commit history, from the first commit up to HEAD.
+		TOP_REF="HEAD"
+		BOTTOM_REF="$(git log git rev-list HEAD --max-count=1)" # https://stackoverflow.com/a/5189296/7009800
+	else
+		# There's a last tag. Use commit history from that tag up to HEAD.
+		TOP_REF="HEAD"
+		BOTTOM_REF="$latest_tag"
+	fi
 else
-	changelog="$(git log --pretty=format:" - %cs [%aN]: %s" "$GIT_REF"..HEAD)"
+	# A tag points at HEAD. Common case for prod builds.
+	previous_tag="$(git describe --tags --abbrev=0 "$(git rev-list HEAD --tags --skip=1 --max-count=1)")"
+	if [ -z "$previous_tag" ]; then
+		# There's only one tag. Use all commit history, from the first commit up to HEAD.
+		TOP_REF="$tag_at_head"
+		BOTTOM_REF="$(git log git rev-list HEAD --max-count=1)"
+	else
+		# There are at least two tags. Use commit history from the previous tag up to HEAD.
+		TOP_REF="$tag_at_head"
+		BOTTOM_REF="$previous_tag"
+	fi
 fi
 
-tag_count=$(git tag -l | wc -l | awk '{print $1}')
-echo "Repository contains $tag_count tags" >&2
-latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "None")
+changelog="$(git log --pretty=format:" - %cs by %aN: %s" "$BOTTOM_REF".."$TOP_REF")"
 
 # Add branch info
-branch="$(git branch --contains "$GIT_REF" | cut -c 3-)" # " *master" -> "master"
-if [ -z "$branch" ]; then
-	echo "Branch that contains ref '$GIT_REF' not found"
-	exit 1
-fi
+branch="$(git branch --contains "$TOP_REF" | cut -c 3-)" # " *master" -> "master"
 
 # Output collected information
 echo "Author: $(git log --pretty=format:"%aN <%aE>" HEAD^..HEAD)"
 echo "Committer: $(git log --pretty=format:"%cN <%cE>" HEAD^..HEAD)"
 echo "Branch: $branch"
-echo "Commit: $(git rev-parse --short "$GIT_REF")"
-echo "Latest tag: $latest_tag"
-echo "Changelog:"
+echo "TOP_REF (head commit): $(git rev-parse --short "$TOP_REF")"
+echo "BOTTOM_REF: $(git rev-parse --short "$BOTTOM_REF")"
+echo "Changelog between $BOTTOM_REF and $TOP_REF:" # dev/tst: Changelog between HEAD and v4.5.11, prod: Changelog between v4.6.0 and v4.5.11
 echo "$changelog"
