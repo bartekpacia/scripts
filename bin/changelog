@@ -1,50 +1,35 @@
 #!/usr/bin/env bash
-# fail if any commands fails
-set -e
+set -euo pipefail
 
 # changelog prints a nice log of recent git commits.
+# Example usage:
+# $ changelog "$(git describe --tags --abbrev=0)" (changelog since the last tag)
+# $ changelog @^^^ (changelog since 3 commits ago)
 
-# Read all tags, separate them into an array
-all_tags=$(git tag -l | wc -l)
-
-if [ "$all_tags" = 0 ]; then
-	echo "Repository contains no tags. Please make a tag first. Fetching last 5 commits"
-
-	changelog="$(git log -n 5 --pretty=format:" - %s [%an]")"
-elif [ "$all_tags" = 1 ]; then
-	echo "Fetching last 5 commits."
-
-	changelog="$(git log -n 5 --pretty=format:" - %s [%an]")"
+GIT_REF="${1:-}"
+if [ -z "$GIT_REF" ]; then
+	printf "No git ref was passed as the 1st argument. Up to 5 last commits will be used instead" >&2
+	changelog="$(git log -n 5 --pretty=format:" - %cs [%aN]: %s")"
 else
-	echo "Fetching commits since last tag."
-
-	latest_tag=$(git describe --tags --abbrev=0)
-
-	changelog="$(git log --pretty=format:" - %s [%an]" "$latest_tag"..HEAD)"
+	changelog="$(git log --pretty=format:" - %cs [%aN]: %s" "$GIT_REF"..HEAD)"
 fi
 
+tag_count=$(git tag -l | wc -l | awk '{print $1}')
+echo "Repository contains $tag_count tags" >&2
+latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "None")
+
 # Add branch info
-branch="$(git branch --contains "$GIT_CLONE_COMMIT_HASH")"
-branch=${branch:2}
-NEWLINE=$'\n'
-if [ -n "$branch" ]; then
-	if [[ "$branch" == *"feature"* ]]; then
-		branchinfo="*_WARNING_*: This is a _FEATURE_ build on *${branch}*${NEWLINE}${NEWLINE}"
-		changelog=$branchinfo$changelog
-	elif [[ "$branch" == *"hotfix"* ]]; then
-		branchinfo="*_WARNING_*: This is a _HOTFIX_ build on *${branch}*${NEWLINE}${NEWLINE}"
-		changelog=$branchinfo$changelog
-	else
-		branchinfo="Built on *${branch}*${NEWLINE}${NEWLINE}"
-		changelog=$branchinfo$changelog
-	fi
+branch="$(git branch --contains "$GIT_REF" | cut -c 3-)" # " *master" -> "master"
+if [ -z "$branch" ]; then
+	echo "Branch that contains ref '$GIT_REF' not found"
+	exit 1
 fi
 
 # Output collected information
-echo "Committer: $(git log --pretty=format:"%ce" HEAD^..HEAD)"
+echo "Author: $(git log --pretty=format:"%aN <%aE>" HEAD^..HEAD)"
+echo "Committer: $(git log --pretty=format:"%cN <%cE>" HEAD^..HEAD)"
+echo "Branch: $branch"
+echo "Commit: $(git rev-parse --short "$GIT_REF")"
 echo "Latest tag: $latest_tag"
-# echo "Previous tag: $previous_tag" # TODO: remove
 echo "Changelog:"
 echo "$changelog"
-
-export CHANGELOG="$changelog"
